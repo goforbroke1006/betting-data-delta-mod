@@ -5,6 +5,12 @@ import (
 	"time"
 )
 
+func NewMatchTasksTable() *MatchTasksTable {
+	return &MatchTasksTable{
+		tableMtx: sync.RWMutex{},
+	}
+}
+
 type MatchTasksTable struct {
 	table    map[string]time.Time // assoc matchId -> addedAt
 	tableMtx sync.RWMutex
