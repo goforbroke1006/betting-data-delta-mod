@@ -29,14 +29,14 @@ func (std ScoresTableDelta) FlushAndGetDiff() map[string][2]uint {
 		oldScores, exists := std.table[matchID]
 		if !exists {
 			std.tableMtx.Lock()
-			std.table[matchID] = matchData{scores: actualScores, updatedAt: time.Now(),}
+			std.table[matchID] = matchData{scores: actualScores, updatedAt: time.Now()}
 			std.tableMtx.Unlock()
 			delta[matchID] = actualScores
 			continue
 		}
 		if actualScores[0] != oldScores.scores[0] || actualScores[1] != oldScores.scores[1] {
 			std.tableMtx.Lock()
-			std.table[matchID] = matchData{scores: actualScores, updatedAt: time.Now(),}
+			std.table[matchID] = matchData{scores: actualScores, updatedAt: time.Now()}
 			std.tableMtx.Unlock()
 			delta[matchID] = actualScores
 		}
@@ -52,5 +52,13 @@ func (std ScoresTableDelta) Clear(before time.Time) {
 			delete(std.table, matchID)
 			std.tableMtx.Unlock()
 		}
+	}
+}
+
+func NewScoresTableDelta() *ScoresTableDelta {
+	return &ScoresTableDelta{
+		table:    map[string]matchData{},
+		tableMtx: sync.Mutex{},
+		buffer:   map[string][2]uint{},
 	}
 }
