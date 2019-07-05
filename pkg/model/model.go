@@ -7,6 +7,7 @@ import (
 
 func NewMatchTasksTable() *MatchTasksTable {
 	return &MatchTasksTable{
+		table:    map[string]time.Time{},
 		tableMtx: sync.RWMutex{},
 	}
 }
